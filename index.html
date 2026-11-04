@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e9e2d7">
+  <meta name="apple-mobile-web-app-title" content="一封信">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="color-scheme" content="light">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="一封在愿意时打开的信。">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta property="og:title" content="一封信">
+  <meta property="og:description" content="一封在愿意时打开的信。">
+  <meta property="og:type" content="website">
+  <meta name="referrer" content="no-referrer">
+  <title>一封信</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%23e9e2d7'/%3E%3Crect x='8' y='12' width='24' height='17' rx='2' fill='%23f8f4ec' stroke='%2379504e'/%3E%3Cpath d='M9 13l11 9 11-9' fill='none' stroke='%2379504e'/%3E%3C/svg%3E">
+  <style>
+    :root { --desk:#e9e2d7; --paper:#f8f4ec; --ink:#39342f; --muted:#74695f; --wine:#79504e; --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif; --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+    * { box-sizing:border-box; }
+    html { background:var(--desk); color:var(--ink); -webkit-text-size-adjust:100%; }
+    body { margin:0; font-family:var(--sans); background:radial-gradient(ellipse at 48% 12%,#f5f0e7 0%,#eee8de 37%,var(--desk) 80%); }
+    button { font:inherit; -webkit-tap-highlight-color:transparent; }
+    button:focus-visible { outline:2px solid var(--wine); outline-offset:7px; }
+    ::selection { color:var(--ink); background:#d9c7ba; }
+    [hidden] { display:none !important; }
+    .texture { position:fixed; inset:0; pointer-events:none; z-index:60; opacity:.035; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.7' d='M0 0h160v160H0z'/%3E%3C/svg%3E"); }
+    .site-header { position:fixed; inset:0 0 auto; z-index:50; height:80px; padding:0 max(36px,env(safe-area-inset-right)) 0 max(36px,env(safe-area-inset-left)); display:flex; align-items:center; justify-content:space-between; transition:background .3s,border-color .3s; border-bottom:1px solid transparent; }
+    .brand { display:flex; align-items:center; gap:11px; color:#6e6257; font-size:12px; letter-spacing:.23em; }
+    .brand svg { width:19px; height:19px; stroke-width:1.15; }
+    .header-note { font-family:var(--serif); color:#82776a; font-size:13px; letter-spacing:.12em; }
+    body.reading .site-header { background:rgba(239,233,224,.86); border-color:rgba(116,105,95,.09); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+    .quiet-button { border:0; background:transparent; color:var(--muted); display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:8px 10px; border-radius:24px; font-size:12px; letter-spacing:.08em; cursor:pointer; transition:background .2s,color .2s; }
+    .quiet-button:hover { color:var(--wine); background:rgba(121,80,78,.06); }
+    .quiet-button svg { width:17px; height:17px; }
+    .cover { min-height:100vh; min-height:100svh; display:flex; align-items:center; justify-content:center; padding:106px 28px 56px; overflow:hidden; }
+    .cover-content { width:100%; max-width:640px; text-align:center; transition:opacity .36s ease,transform .7s cubic-bezier(.2,.7,.2,1); }
+    .intro { max-width:472px; margin:0 auto 59px; font-family:var(--serif); font-size:19px; line-height:1.95; font-weight:400; letter-spacing:.045em; text-wrap:pretty; color:#5c5046; }
+    .open-letter { display:block; margin:0 auto; padding:0; border:0; background:transparent; color:inherit; cursor:pointer; width:100%; max-width:478px; border-radius:5px; }
+    .envelope { display:block; position:relative; isolation:isolate; width:100%; aspect-ratio:1.67; perspective:1200px; text-align:center; border-radius:3px; background:#e9dfce; box-shadow:0 2px 3px #6b53430c,0 15px 30px -15px #6b53432a,0 44px 70px -35px #5a413745; transition:transform .65s cubic-bezier(.2,.7,.2,1),box-shadow .5s; }
+    .envelope::before { content:""; position:absolute; inset:-1px; border:1px solid #b9a58e45; border-radius:3px; z-index:10; pointer-events:none; }
+    .letter-peek { position:absolute; inset:12px 17px 8px; border:1px solid #a78f771c; border-radius:2px; background:linear-gradient(115deg,#fffcf6,#f9f5ed); box-shadow:0 2px 8px #76645312; transition:transform .6s cubic-bezier(.2,.7,.2,1) .2s; z-index:1; }
+    .letter-peek::before { content:""; position:absolute; top:26px; left:30px; right:30px; height:1px; background:#a9957b35; }
+    .envelope-left,.envelope-right { position:absolute; inset:0; z-index:2; }
+    .envelope-left { background:linear-gradient(22deg,#f2eadb,#f8f1e5); clip-path:polygon(0 0,56% 55%,0 100%); }
+    .envelope-right { background:linear-gradient(-22deg,#e9decc,#f4ecdf); clip-path:polygon(100% 0,44% 55%,100% 100%); }
+    .envelope-front { position:absolute; inset:0; z-index:3; border-radius:0 0 3px 3px; background:linear-gradient(165deg,#f8f1e5 5%,#eee4d4 100%); clip-path:polygon(0 100%,0 27%,50% 66%,100% 27%,100% 100%); }
+    .fold-line { position:absolute; top:27%; height:1px; width:55.2%; background:#bca98f35; z-index:4; transform-origin:left; left:0; transform:rotate(25deg); }
+    .fold-line.right { left:auto; right:0; transform-origin:right; transform:rotate(-25deg); }
+    .flap { position:absolute; top:0; left:0; right:0; height:65%; transform-origin:50% 0; transform-style:preserve-3d; z-index:5; transition:transform .55s cubic-bezier(.35,0,.2,1),filter .55s; filter:drop-shadow(0 2px 1px #715c4220); }
+    .flap-face { position:absolute; inset:0; background:linear-gradient(170deg,#fbf5eb,#eee3d2); clip-path:polygon(0 0,100% 0,51.5% 93%,50% 94%,48.5% 93%); }
+    .seal { position:absolute; top:50%; left:50%; width:41px; height:41px; margin:-20px; z-index:6; border-radius:49% 48% 45% 49%; background:radial-gradient(circle at 35% 26%,#a2766b,#80534f 72%); box-shadow:inset 0 1px 2px #e1b7a352,inset 0 -2px 4px #4a272b50,0 3px 5px #5a392e27; display:grid; place-items:center; transition:opacity .18s,transform .25s; }
+    .seal::before { content:""; position:absolute; inset:5px; border-radius:50%; border:1px solid #c1917b70; box-shadow:0 1px 1px #49252966; }
+    .seal svg { width:19px; height:23px; color:#d0a18a; filter:drop-shadow(0 1px 0 #583233); }
+    .address { position:absolute; top:72%; left:0; right:0; z-index:7; display:flex; align-items:baseline; justify-content:center; gap:15px; font-family:var(--serif); }
+    .address .to { font-size:13px; color:#7c6d5b; }
+    .address .name { font-size:27px; letter-spacing:.2em; color:#51463c; }
+    .emboss { position:absolute; bottom:22px; left:31px; width:34px; height:76px; z-index:6; color:#9c8b7259; filter:drop-shadow(0 1px 0 #fff9ef); transform:rotate(-13deg); }
+    .open-label { display:inline-flex; align-items:center; justify-content:center; gap:14px; margin-top:43px; color:var(--wine); border:1px solid #79504e30; padding:13px 23px; min-height:46px; border-radius:100px; font-size:13px; letter-spacing:.12em; background:#f8f4ec4d; box-shadow:inset 0 1px 0 #ffffff59; transition:background .3s,border-color .3s,box-shadow .3s; }
+    .open-label svg { width:16px; height:16px; transition:transform .3s; }
+    @media(hover:hover) { .cover:not(.opening) .open-letter:hover .envelope { transform:translateY(-5px) rotate(-.5deg); box-shadow:0 3px 4px #6b53430c,0 20px 32px -15px #6b53432a,0 50px 80px -35px #5a41374a; } .open-letter:hover .open-label { background:#f8f4ecaa; border-color:#79504e55; } .open-letter:hover .open-label svg { transform:translateX(3px); } }
+    .opening .envelope { transform:translateY(22px); }
+    .opening .intro { opacity:0; transition:opacity .2s; }
+    .opening .flap { transform:rotateX(-177deg); filter:none; z-index:0; }
+    .opening .seal { opacity:0; transform:scale(.8); }
+    .opening .letter-peek { transform:translateY(-71px); }
+    .opening .open-label { opacity:0; transition:opacity .2s; }
+    .cover.leaving .cover-content { opacity:0; transform:translateY(-22px); }
+    .reader { padding:104px 28px 35px; min-height:100vh; min-height:100svh; }
+    .paper { position:relative; margin:0 auto; width:100%; max-width:860px; min-height:calc(100vh - 139px); min-height:calc(100svh - 139px); padding:47px 84px 23px; display:flex; flex-direction:column; background:linear-gradient(95deg,#faf6ee,var(--paper) 60%,#f6f1e8); border:1px solid #b9a58e24; border-radius:3px; box-shadow:0 2px 3px #6b534308,0 24px 55px -28px #6b534329; }
+    .paper::before { content:""; position:absolute; left:28px; right:28px; top:19px; border-top:1px solid #a9957b22; }
+    .letter-heading { margin:0 0 36px; display:flex; align-items:center; gap:16px; }
+    .letter-heading::before { content:""; width:24px; height:1px; background:#9c6c6266; }
+    .letter-heading h1 { font-family:var(--serif); font-size:27px; font-weight:400; letter-spacing:.12em; margin:0; outline:none; scroll-margin-top:115px; }
+    .letter-heading .to { font-size:15px; color:var(--muted); margin-right:12px; }
+    .letter-body { flex:1; display:flex; flex-direction:column; font-family:var(--serif); font-size:19px; line-height:2.02; letter-spacing:.025em; overflow-wrap:break-word; line-break:strict; }
+    .letter-body p { margin:0 0 1.5em; }
+    .letter-page { flex:1; outline:none; }
+    .letter-page p:last-child { margin-bottom:0; }
+    .letter-page.page-enter { animation:pageIn .28s ease-out both; }
+    .letter-page:has(> .last-line:only-child) { display:flex; flex-direction:column; justify-content:center; padding:0 0 24px; }
+    .letter-body p.last-line { margin-top:2em; margin-bottom:0; color:#664a43; }
+    .letter-body p.last-line:first-child { margin-top:0; }
+    .page-navigation { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:14px; border-top:1px solid #a9957b2a; margin-top:35px; padding-top:17px; }
+    .page-navigation button { border:0; border-radius:24px; min-height:44px; padding:9px 12px; background:transparent; color:var(--wine); cursor:pointer; font-size:13px; display:flex; align-items:center; gap:9px; white-space:nowrap; }
+    .page-navigation button:hover { background:#79504e09; }
+    .page-navigation button:disabled { opacity:.3; cursor:default; background:transparent; }
+    .page-navigation svg { width:16px; height:16px; }
+    .page-navigation #previousPage { justify-self:start; }
+    .page-navigation #nextPage { justify-self:end; }
+    .page-number { font:11px var(--sans); color:var(--muted); letter-spacing:.16em; font-variant-numeric:tabular-nums; }
+    @keyframes pageIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+    .end-mark { margin-top:45px; display:flex; align-items:center; gap:16px; color:#9a846c; opacity:.66; }
+    .end-mark::after { content:""; height:1px; width:51px; background:#a9957b70; }
+    .end-mark svg { width:22px; height:44px; transform:rotate(14deg); }
+    .reader-footer { margin:41px auto 0; text-align:center; }
+    .reader-footer .quiet-button { padding:10px 20px; font-size:13px; border:1px solid #79504e25; }
+    .reader.appearing { animation:arrive .65s cubic-bezier(.2,.7,.2,1) both; }
+    @keyframes arrive { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    noscript p { padding:20px; text-align:center; font-size:14px; }
+    @media(min-width:1300px) and (min-height:850px) { .cover-content { transform:translateY(-12px); } .intro { margin-bottom:66px; } }
+    @media(max-width:640px) {
+      .site-header { height:65px; padding:0 max(23px,env(safe-area-inset-right)) 0 max(23px,env(safe-area-inset-left)); }
+      .brand { font-size:11px; gap:9px; } .brand svg { width:17px; } .header-note { font-size:12px; }
+      .cover { padding:102px 28px 48px; }
+      .cover-content { max-width:440px; }
+      .intro { font-size:17px; line-height:1.95; letter-spacing:.025em; max-width:338px; margin-bottom:46px; }
+      .open-letter { max-width:390px; }
+      .address { top:72%; gap:12px; } .address .name { font-size:25px; } .address .to { font-size:12px; }
+      .seal { width:35px; height:35px; margin:-17px; } .seal svg { width:16px; height:20px; }
+      .emboss { left:23px; bottom:14px; height:59px; width:27px; }
+      .open-label { margin-top:34px; font-size:12px; padding:13px 21px; }
+      .reader { padding:65px 0 0; background:var(--paper); }
+      body.reading { background:var(--paper); }
+      body.reading .site-header { background:#f8f4eceb; }
+      .paper { min-height:calc(100vh - 65px); min-height:calc(100svh - 65px); padding:36px 27px 17px; padding-bottom:max(17px,env(safe-area-inset-bottom)); border:0; border-radius:0; box-shadow:none; background:var(--paper); }
+      .paper::before { display:none; }
+      .letter-heading { margin-bottom:34px; gap:12px; }
+      .letter-heading h1 { font-size:25px; scroll-margin-top:100px; }
+      .letter-heading .to { font-size:14px; }
+      .letter-body { font-size:18px; line-height:1.95; letter-spacing:.015em; }
+      .letter-body p { margin-bottom:1.55em; }
+      .letter-body p.last-line { margin-top:2em; }
+      .letter-body p.last-line:first-child { margin-top:0; }
+      .page-navigation { margin-top:30px; gap:6px; padding-top:13px; }
+      .page-navigation button { font-size:12px; padding-left:6px; padding-right:6px; gap:7px; }
+      .reader-footer { margin-top:13px; }
+    }
+    @media(max-width:360px) { .cover { padding-left:24px; padding-right:24px; } .intro { font-size:16px; } .paper { padding-left:24px; padding-right:24px; } .address .name { font-size:22px; } }
+    @media(max-height:660px) and (min-width:641px) { .cover { padding-top:95px; } .intro { margin-bottom:35px; font-size:17px; } .open-letter { max-width:380px; } .open-label { margin-top:28px; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
+    @supports not (aspect-ratio: 1 / 1) { .envelope { height:0; padding-top:59.9%; } }
+    :root { color-scheme:light; }
+    @media print { .texture,.site-header,.cover,.reader-footer,.page-navigation { display:none !important; } .reader { display:block !important; padding:0; } body,html,.paper { background:white; } .paper { display:block; box-shadow:none; border:0; padding:0; max-width:none; min-height:0; } .paper::before { display:none; } .letter-body { display:block; font-size:12pt; line-height:1.8; } .letter-body .letter-page { display:block !important; min-height:0; break-after:page; } .letter-page:last-child { break-after:auto; } .letter-body p { orphans:3; widows:3; } }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="sprig" viewBox="0 0 40 88"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"><path d="M18 84C18 63 22 49 18 29M19 68C9 61 7 56 7 49C15 51 19 58 19 68M20 56C29 52 33 44 31 37C24 40 20 48 20 56M20 43C11 39 8 32 10 27C16 29 19 35 20 43M18 29C12 22 12 15 17 10C23 16 24 23 18 29M18 29C25 29 31 24 32 18C26 18 20 22 18 29M17 10C14 7 15 3 18 2C22 4 22 8 17 10"/></g></symbol></defs></svg>
+  <div class="texture" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg><span>一封信</span></div>
+    <span class="header-note" id="headerNote">写给明朗</span>
+    <button class="quiet-button" id="headerClose" type="button" hidden aria-label="合上信，回到封面"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="m8 5-7 7 7 7M2 12h17"/></svg>合上信</button>
+  </header>
+  <main>
+    <section class="cover" id="cover" aria-label="信的封面">
+      <div class="cover-content">
+        <p class="intro" id="intro">明朗，这封信与其说是写给你的，不如说是写给我的，里面是一些我的心情，在你希望看见时打开就好。</p>
+        <button class="open-letter" id="openLetter" type="button" aria-label="打开这封信" aria-controls="reader" aria-expanded="false">
+          <span class="envelope" aria-hidden="true">
+            <span class="letter-peek"></span><span class="envelope-left"></span><span class="envelope-right"></span><span class="envelope-front"></span><span class="fold-line"></span><span class="fold-line right"></span>
+            <span class="flap"><span class="flap-face"></span></span>
+            <span class="seal"><svg viewBox="0 0 40 88"><use href="#sprig"/></svg></span>
+            <svg class="emboss" viewBox="0 0 40 88"><use href="#sprig"/></svg>
+            <span class="address"><span class="to">致</span><span class="name">明朗</span></span>
+          </span>
+          <span class="open-label">打开这封信<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></span>
+        </button>
+      </div>
+    </section>
+    <section class="reader" id="reader" hidden aria-label="信的正文">
+      <article class="paper">
+        <div class="letter-heading"><h1 id="letterTitle" tabindex="-1"><span class="to">致</span>明朗</h1></div>
+        <div class="letter-body" id="letterBody"><section class="letter-page" data-page="0" aria-label="第 1 页" tabindex="-1"><p data-paragraph="0">明朗，这几天和你相处很开心。老实说，我是很喜欢你的。但如果你问我喜欢你什么，我其实说不出来——我只知道，你是一个很有生命力的人，在这种意义上，其实我对你的灵魂有这一种珍爱。</p></section>
+<section class="letter-page" data-page="1" aria-label="第 2 页" tabindex="-1" hidden><p data-paragraph="1">当我喜欢你的时候，我会觉得看到你的笑容也给我带来快乐，会觉得去找你的时候是对我一天的奖励，会觉得接你成为了一种连接，牵你的手的时候会很安心。</p>
+<p data-paragraph="2">当我爱着你的时候，我一天会思念你很多次，当我起床，我会想看看有没有你的消息，当我上着课，我会好奇你的思维飘向哪里，当我一个人吃着饭的时候，我会觉得分享成为了一种恩赐，当我感受到清风拂过，我会希望，你能感受到相同的凉意。</p></section>
+<section class="letter-page" data-page="2" aria-label="第 3 页" tabindex="-1" hidden><p data-paragraph="3">有人说，喜欢就是希望占有对方，而爱是分享，我现在觉得真的很对，爱就是希望自己觉得美好的对方也有一份，哪怕身体不在一起，也希望我们经验的是同一个世界，我爱你不是因为我需要你，我需要你因为我爱你。</p></section>
+<section class="letter-page" data-page="3" aria-label="第 4 页" tabindex="-1" hidden><p data-paragraph="4">你会不会疑惑，只是很短的时间，为什么我有这么多感情？我也很疑惑。我找你的时候挺单纯的，只是想认识几个朋友，可相处下来，却又不想只做朋友了。感情真是很奇怪，我也不懂我的内心。</p>
+<p data-paragraph="5">我以前是个很随缘的人，我知道人和人总有分开的时候，可我爱一个人的时候，就总会想：为什么没有结果呢。爱让人意识到自己的有限与必死，于是我们总渴望着永恒。这种执念，某种程度上是我的本性。我会为它感到悲伤，但我很喜欢它——因为这样的执念每次发生，都在告诉我：我真真切切地生活着；有一种可贵的感情降临在我短暂的生命里，而我可以在那些时刻与人类永恒的精神相遇。</p></section>
+<section class="letter-page" data-page="4" aria-label="第 5 页" tabindex="-1" hidden><p data-paragraph="6">明朗，你总是说我很好，我知道我不是那么好的人，是人总会有缺点。我以前笨拙，不懂表达；现在好像懂得表达了，但还是幼稚。你也在包容我，我是知道的。在我眼里，你真的很美好。和你相处的时候，我不会去想别人怎么评价你，也不去想这个那个评价体系对你的定义，我只是感到很安心。说出来会有点肉麻hhh，总之，和你相处真的很开心。</p></section>
+<section class="letter-page" data-page="5" aria-label="第 6 页" tabindex="-1" hidden><p data-paragraph="7">我不知道你会不会看到这些话。我本以为写下来会很悲伤，悲伤是有的，可一想起某些时光，我还是开心，或你也许记得不深，但至少我很快乐——第一捧花送给你，我真的很幸福。</p>
+<p data-paragraph="8">因为哪怕只是和你相处这很短的日子，我也能看到自己改变了很多，我开始有勇气和喜欢的人一起牵手走在路上，更不用说给喜欢的人送花了，对我来说我实在实现了一种精神的超越吧，对此我很感激。</p></section>
+<section class="letter-page" data-page="6" aria-label="第 7 页" tabindex="-1" hidden><p data-paragraph="9">在我看来，明朗你是一个很坚强的人。你会有悲伤难过的时候，也会有很多压力大的时刻，但我相信，你一个人也一定能给出属于你的答案。你也非常负责而有勇气，你能坚定的知道自己喜欢着什么并且能够想我表达，这真的是可贵的品质，或许也正是因为你能拒绝我，我才更爱着你吧。</p></section>
+<section class="letter-page" data-page="7" aria-label="第 8 页" tabindex="-1" hidden><p data-paragraph="10">选择走性少数的路，是非常艰难的，你可能会被家人不解，会被从前的朋友讨厌，会有很多热衷于别人生活的人来指指点点，或许你暂时得不到体制眼光的承认，可是，我相信，坚持你爱的人和生活方式，会是通向幸福的唯一一条路。我对你的未来充满信心o。</p></section>
+<section class="letter-page" data-page="8" aria-label="第 9 页" tabindex="-1" hidden><p data-paragraph="11">这些话是我在期中的时候写下的。我不打算跟你说&quot;加油准备考试&quot;之类的话，你已经很累了，值得休息。在我看来，学艺术的人，就更应该用艺术的方式来生活。希望你认真对待你的生活，这样将来我们回首往事的时候，才能与自己和解。</p></section>
+<section class="letter-page" data-page="9" aria-label="第 10 页" tabindex="-1" hidden><p data-paragraph="12">我想，我对亲密关系的期待还会持续一段时间。你不用为我担心，也不用叫一个甘之如怡的人走出来，爱一个人的时候，我们总会预设一份相同的爱，这是无法避免的——我很开心能有这样美好的期待，但我也知道，这份期待总有释然的一天。</p></section>
+<section class="letter-page" data-page="10" aria-label="第 11 页" tabindex="-1" hidden><p data-paragraph="13">我最后想说的是：我对你人格魅力的爱，或许会持续非常久的时间。如果你需要我的帮助，我会一直都在o。</p></section>
+<section class="letter-page" data-page="11" aria-label="第 12 页" tabindex="-1" hidden><p data-paragraph="14" class="last-line">爱你，至少在我写下这些话的时候。</p></section></div>
+        <div class="end-mark" id="endMark" hidden aria-hidden="true"><svg viewBox="0 0 40 88"><use href="#sprig"/></svg></div>
+        <nav class="page-navigation" aria-label="信件翻页">
+          <button id="previousPage" type="button" disabled aria-label="上一页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M20 12H5m6-6-6 6 6 6"/></svg><span>上一页</span></button>
+          <span class="page-number" id="pageNumber" role="status" aria-live="polite" aria-atomic="true"></span>
+          <button id="nextPage" type="button" aria-label="下一页"><span id="nextLabel">下一页</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
+        </nav>
+      </article>
+    </section>
+  </main>
+  <noscript><style>.cover,.reader-footer,.page-navigation{display:none}.reader[hidden],.letter-body .letter-page[hidden]{display:block!important}.letter-body .letter-page{margin-bottom:2em}</style><p>这封信可以直接阅读。</p></noscript>
+  <script>
+    (() => {
+      const cover=document.getElementById('cover'),reader=document.getElementById('reader'),open=document.getElementById('openLetter'),headerClose=document.getElementById('headerClose'),note=document.getElementById('headerNote'),title=document.getElementById('letterTitle');
+      const pages=[...document.querySelectorAll('.letter-page')],previous=document.getElementById('previousPage'),next=document.getElementById('nextPage'),nextLabel=document.getElementById('nextLabel'),pageNumber=document.getElementById('pageNumber'),endMark=document.getElementById('endMark');
+      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+      let state='closed',leaveTimer,openTimer,pageIndex=0;
+      function displayPage(index,focus=true){
+        const target=Math.min(Math.max(Math.trunc(Number(index)||0),0),pages.length-1);
+        if(!pages.length)return;
+        pageIndex=target;
+        pages.forEach((page,i)=>{page.hidden=i!==target;page.classList.remove('page-enter');});
+        if(!reduced.matches)pages[target].classList.add('page-enter');
+        previous.disabled=target===0;
+        const last=target===pages.length-1;
+        nextLabel.textContent=last?'合上信':'下一页';next.setAttribute('aria-label',last?'合上信':'下一页');
+        pageNumber.textContent=String(target+1).padStart(2,'0')+' / '+String(pages.length).padStart(2,'0');
+        pageNumber.setAttribute('aria-label','第 '+(target+1)+' 页，共 '+pages.length+' 页');
+        endMark.hidden=!last;
+        window.scrollTo({top:0,behavior:'instant'});
+        if(focus)pages[target].focus({preventScroll:true});
+      }
+      function showLetter(index=0,focus=true){
+        cover.hidden=true; reader.hidden=false; note.hidden=true; headerClose.hidden=false;
+        document.body.classList.add('reading'); reader.classList.add('appearing'); open.setAttribute('aria-expanded','true');
+        state='open';displayPage(index,false);if(focus)title.focus({preventScroll:true});
+      }
+      function openLetter(){
+        if(state!=='closed')return;
+        state='opening';open.disabled=true;
+        if(reduced.matches){showLetter();return;}
+        cover.classList.add('opening');
+        leaveTimer=window.setTimeout(()=>cover.classList.add('leaving'),520);
+        openTimer=window.setTimeout(()=>showLetter(),880);
+      }
+      function closeLetter(){
+        if(state!=='open')return;
+        window.clearTimeout(leaveTimer);window.clearTimeout(openTimer);
+        reader.hidden=true;reader.classList.remove('appearing');cover.hidden=false;cover.classList.remove('opening','leaving');
+        headerClose.hidden=true;note.hidden=false;document.body.classList.remove('reading');open.disabled=false;open.setAttribute('aria-expanded','false');
+        window.scrollTo({top:0,behavior:'instant'});open.focus({preventScroll:true});state='closed';
+      }
+      open.addEventListener('click',openLetter);headerClose.addEventListener('click',closeLetter);
+      previous.addEventListener('click',()=>displayPage(pageIndex-1));
+      next.addEventListener('click',()=>pageIndex===pages.length-1?closeLetter():displayPage(pageIndex+1));
+      document.addEventListener('keydown',event=>{
+        if(state!=='open'||event.altKey||event.ctrlKey||event.metaKey||event.target.closest('input,textarea,select,[contenteditable="true"]'))return;
+        if(event.key==='Escape'){event.preventDefault();closeLetter();}
+        else if(event.key==='ArrowRight'&&pageIndex<pages.length-1){event.preventDefault();displayPage(pageIndex+1);}
+        else if(event.key==='ArrowLeft'&&pageIndex>0){event.preventDefault();displayPage(pageIndex-1);}
+      });
+      document.addEventListener('letter:preview',event=>{
+        if(window.parent===window)return;
+        window.clearTimeout(leaveTimer);window.clearTimeout(openTimer);
+        showLetter(event.detail?.page||0,false);
+      });
+      let touchStart=null;
+      document.addEventListener('touchstart',event=>{
+        if(state!=='open'||event.touches.length!==1)return;
+        touchStart={x:event.touches[0].clientX,y:event.touches[0].clientY};
+      },{passive:true});
+      document.addEventListener('touchend',event=>{
+        if(!touchStart||state!=='open'){touchStart=null;return;}
+        const point=event.changedTouches[0],dx=point.clientX-touchStart.x,dy=point.clientY-touchStart.y;
+        touchStart=null;
+        if(Math.abs(dx)<46||Math.abs(dx)<Math.abs(dy)*1.4)return;
+        if(dx<0){if(pageIndex<pages.length-1)displayPage(pageIndex+1);}
+        else if(pageIndex>0)displayPage(pageIndex-1);
+      },{passive:true});
+    })();
+  </script>
+</body>
+</html>
